@@ -34,7 +34,7 @@ begin
     initial : PROCESS -- initial begin
     BEGIN
         keycode <= X"00000000"; -- keycode[31:0]<=0'h00000000;
-        cnt <= B"0000"; -- cnt<=4'b0000;
+        cnt <= "0000"; -- cnt<=4'b0000;
         flag <= '0'; -- flag<=1'b0;
         WAIT;
     END PROCESS; -- end
