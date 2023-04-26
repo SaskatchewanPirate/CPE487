@@ -25,7 +25,7 @@ begin
     BEGIN
         dp <= '1'; -- assign dp = 1;
         s <= clkdiv(19 DOWNTO 17); -- assign s = clkdiv[19:17];
-        aen <= B"11111111"; -- assign aen = 8'b11111111;
+        aen <= "11111111"; -- assign aen = 8'b11111111;
         WAIT;
     END PROCESS;
 
@@ -60,45 +60,45 @@ begin
         -- MSB-LSB
         -- gfedcba
             WHEN 0 => -- 0:seg = 7'b1000000;////0000
-                seg <= B"1000000";		
+                seg <= "1000000";		
             WHEN 1 => -- 1:seg = 7'b1111001;////0001
-                seg <= B"1111001";
+                seg <= "1111001";
             WHEN 2 => -- 2:seg = 7'b0100100;////0010
-                seg <= B"0100100";
+                seg <= "0100100";
             WHEN 3 => -- 3:seg = 7'b0110000;////0011
-                seg <= B"0110000";
+                seg <= "0110000";
             WHEN 4 => -- 4:seg = 7'b0011001;////0100
-                seg <= B"0011001";
+                seg <= "0011001";
             WHEN 5 => -- 5:seg = 7'b0010010;////0101
-                seg <= B"0010010";
+                seg <= "0010010";
             WHEN 6 => -- 6:seg = 7'b0000010;////0110
-                seg <= B"0000010";
+                seg <= "0000010";
             WHEN 7 => -- 7:seg = 7'b1111000;////0111
-                seg <= B"1111000";
+                seg <= "1111000";
             WHEN 8 => -- 8:seg = 7'b0000000;////1000
-                seg <= B"0000000";
+                seg <= "0000000";
             WHEN 9 => -- 9:seg = 7'b0010000;////1001
-                seg <= B"0010000";
+                seg <= "0010000";
             WHEN 10 => -- 'hA:seg = 7'b0001000; 
-                seg <= B"0001000";
+                seg <= "0001000";
             WHEN 11 => -- 'hB:seg = 7'b0000011; 
-                seg <= B"0000011";
+                seg <= "0000011";
             WHEN 12 => -- 'hC:seg = 7'b1000110;
-                seg <= B"1000110";
+                seg <= "1000110";
             WHEN 13 => -- 'hD:seg = 7'b0100001;
-                seg <= B"0100001";
+                seg <= "0100001";
             WHEN 14 => -- 'hE:seg = 7'b0000110;
-                seg <= B"0000110";
+                seg <= "0000110";
             WHEN 15 => -- 'hF:seg = 7'b0001110;
-                seg <= B"0001110";
+                seg <= "0001110";
             WHEN OTHERS => -- default: seg = 7'b0000000; // U
-                seg <= B"0000000";
+                seg <= "0000000";
         END CASE; -- endcase
     END PROCESS;
     
     update_an : PROCESS(aen) -- always @(*)begin
     BEGIN
-        an <= B"11111111"; -- an=8'b11111111;
+        an <= "11111111"; -- an=8'b11111111;
         IF (aen(TO_INTEGER(UNSIGNED(s))) = '1') THEN -- if(aen[s] == 1)
             an(TO_INTEGER(UNSIGNED(s))) <= '0'; -- an[s] = 0;
         END IF; -- end
