@@ -21,9 +21,7 @@ ENTITY siren IS
 	);
 END siren;
 
-ARCHITECTURE Behavioral OF siren is
-	CONSTANT curr_tone : UNSIGNED (13 DOWNTO 0) := to_unsigned (344, 14); -- = pitch(Hz) / 0.745
-	
+ARCHITECTURE Behavioral OF siren is	
 	COMPONENT dac_if IS
 		PORT (
 			SCLK : IN STD_LOGIC;
@@ -52,14 +50,23 @@ ARCHITECTURE Behavioral OF siren is
     END COMPONENT;
     COMPONENT seg7decimal IS
         PORT (
-            x : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+            -- x : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
             clk : IN STD_LOGIC;
+            note: IN STRING(1 TO 2);
             seg : OUT STD_LOGIC_VECTOR (6 DOWNTO 0);
             an : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
             dp : OUT STD_LOGIC
         );
     END COMPONENT;
 	-- end Verilog file
+	COMPONENT pitch IS
+	   PORT (
+	       clk : IN STD_LOGIC;
+	       keycode : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+	       pitch : OUT UNSIGNED(13 DOWNTO 0);
+	       notename : OUT STRING(1 TO 2)
+	   );
+	END COMPONENT;
 	
 	SIGNAL tcount : unsigned (19 DOWNTO 0) := (OTHERS => '0'); -- timing counter
 	SIGNAL data_L, data_R : SIGNED (15 DOWNTO 0); -- 16-bit signed audio data
@@ -67,9 +74,12 @@ ARCHITECTURE Behavioral OF siren is
 	SIGNAL slo_clk, sclk, audio_CLK : STD_LOGIC;
 	
 	-- from Verilog file
-	SIGNAL CLK50MHZ : STD_LOGIC REGISTER; -- reg CLK50MHZ=0;
+	SIGNAL CLK50MHZ : STD_LOGIC := '0'; -- reg CLK50MHZ=0;
     SIGNAL keycode : STD_LOGIC_VECTOR (31 DOWNTO 0); -- wire [31:0]keycode;
     -- end Verilog file
+    
+    SIGNAL curr_tone : UNSIGNED (13 DOWNTO 0); -- = pitch(Hz) / 0.745
+    SIGNAL note : STRING(1 TO 2);
     
 BEGIN
     -- from Verilog file
@@ -98,6 +108,7 @@ BEGIN
 		END IF;
 		tcount <= tcount + 1;
 	END PROCESS;
+	
 	dac_MCLK <= NOT tcount(1); -- DAC master clock (12.5 MHz)
 	audio_CLK <= tcount(9); -- audio sampling rate (48.8 kHz)
 	dac_LRCK <= audio_CLK; -- also sent to DAC as left/right clock
@@ -114,14 +125,21 @@ BEGIN
 	);
 	sevenSeg : seg7decimal -- seg7decimal sevenSeg
 	PORT MAP(
-    x => keycode, -- .x(keycode[31:0]),
+    -- x => keycode, -- .x(keycode[31:0]),
     clk => CLK100MHZ, -- .clk(CLK100MHZ),
+    note => note,
     seg => SEG, -- .seg(SEG[6:0]),
     an => AN, -- .an(AN[7:0]),
     dp => DP -- .dp(DP)
     );
 	-- end Verilog file
-	
+	pitch_lookup : pitch
+	PORT MAP(
+	   clk => CLK50MHZ,
+	   keycode => keycode,
+	   pitch => curr_tone,
+	   notename => note
+	   );
 	dac : dac_if
 	PORT MAP(
 		SCLK => sclk, -- instantiate parallel to serial DAC interface
@@ -137,6 +155,6 @@ BEGIN
 		pitch => curr_tone,
 		data => data_L
 		);
-        data_R <= data_L; -- duplicate data on right channel
-
+    data_R <= data_L; -- duplicate data on right channel
+        
 END Behavioral;
