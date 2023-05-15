@@ -85,16 +85,6 @@ begin
     -- Output enable signals for 7-segment displays
     process(aen, s) 
     begin
---    	an <= "11111110" WHEN s = "000" ELSE -- 0
---	          "11111101" WHEN s = "001" ELSE -- 1
---	          "11111011" WHEN s = "010" ELSE -- 2
---	          "11110111" WHEN s = "011" ELSE -- 3
---	          "11101111" WHEN s = "100" ELSE -- 4
---	          "11011111" WHEN s = "101" ELSE -- 5 
---	          "10111111" WHEN s = "110" ELSE -- 6
---	          "01111111" WHEN s = "111" ELSE -- 7
---	          "11111111";
-
         an <= "11111111";
         if aen(to_integer(unsigned(s))) = '1' then
             an(to_integer(unsigned(s))) <= '0';
@@ -108,5 +98,4 @@ begin
             clkdiv <= clkdiv + 1;
         end if;
     end process;
-
 end architecture;
