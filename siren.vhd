@@ -125,7 +125,6 @@ BEGIN
 	);
 	sevenSeg : seg7decimal -- seg7decimal sevenSeg
 	PORT MAP(
-	   -- x => keycode, -- .x(keycode[31:0]),
 	   clk => CLK100MHZ, -- .clk(CLK100MHZ),
 	   note => note,
 	   seg => SEG, -- .seg(SEG[6:0]),
