@@ -4,7 +4,6 @@ use ieee.numeric_std.all;
 use ieee.std_logic_unsigned.all;
 entity seg7decimal is
     port (
-        -- x   : in  std_logic_vector(31 downto 0); --data?
         clk : in  std_logic;                     --clock
         note: in string(1 to 2);
         seg : out std_logic_vector(6 downto 0);  --segment code for current digit
