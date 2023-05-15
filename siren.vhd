@@ -32,7 +32,7 @@ ARCHITECTURE Behavioral OF siren is
 			SDATA : OUT STD_LOGIC
 		);
 	END COMPONENT;
-    COMPONENT tone IS
+	COMPONENT tone IS
 		PORT (
 			clk : IN STD_LOGIC;
 			pitch : IN UNSIGNED (13 DOWNTO 0);
@@ -41,31 +41,31 @@ ARCHITECTURE Behavioral OF siren is
 	END COMPONENT;
 	-- from Verilog file
 	COMPONENT PS2Receiver IS
-	   PORT (
-	        clk : IN STD_LOGIC; -- input clk,
-            kclk : IN STD_LOGIC; -- input kclk,
-            kdata : IN STD_LOGIC; -- input kdata,
-            keycodeout : OUT STD_LOGIC_VECTOR (31 DOWNTO 0) -- output [31:0] keycodeout
-       );
-    END COMPONENT;
-    COMPONENT seg7decimal IS
-        PORT (
-            -- x : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-            clk : IN STD_LOGIC;
-            note: IN STRING(1 TO 2);
-            seg : OUT STD_LOGIC_VECTOR (6 DOWNTO 0);
-            an : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-            dp : OUT STD_LOGIC
-        );
-    END COMPONENT;
+	   	PORT (
+			clk : IN STD_LOGIC; -- input clk,
+            		kclk : IN STD_LOGIC; -- input kclk,
+            		kdata : IN STD_LOGIC; -- input kdata,
+            		keycodeout : OUT STD_LOGIC_VECTOR (31 DOWNTO 0) -- output [31:0] keycodeout
+       		);
+	END COMPONENT;
+    	COMPONENT seg7decimal IS
+        	PORT (
+            		-- x : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+            		clk : IN STD_LOGIC;
+            		note: IN STRING(1 TO 2);
+            		seg : OUT STD_LOGIC_VECTOR (6 DOWNTO 0);
+            		an : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+            		dp : OUT STD_LOGIC
+        	);
+    	END COMPONENT;
 	-- end Verilog file
 	COMPONENT pitch IS
-	   PORT (
-	       clk : IN STD_LOGIC;
-	       keycode : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
-	       pitch : OUT UNSIGNED(13 DOWNTO 0);
-	       notename : OUT STRING(1 TO 2)
-	   );
+	   	PORT (
+	       		clk : IN STD_LOGIC;
+	       		keycode : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+	       		pitch : OUT UNSIGNED(13 DOWNTO 0);
+	       		notename : OUT STRING(1 TO 2)
+	   	);
 	END COMPONENT;
 	
 	SIGNAL tcount : unsigned (19 DOWNTO 0) := (OTHERS => '0'); -- timing counter
@@ -75,20 +75,20 @@ ARCHITECTURE Behavioral OF siren is
 	
 	-- from Verilog file
 	SIGNAL CLK50MHZ : STD_LOGIC := '0'; -- reg CLK50MHZ=0;
-    SIGNAL keycode : STD_LOGIC_VECTOR (31 DOWNTO 0); -- wire [31:0]keycode;
-    -- end Verilog file
+    	SIGNAL keycode : STD_LOGIC_VECTOR (31 DOWNTO 0); -- wire [31:0]keycode;
+    	-- end Verilog file
     
-    SIGNAL curr_tone : UNSIGNED (13 DOWNTO 0); -- = pitch(Hz) / 0.745
-    SIGNAL note : STRING(1 TO 2);
+    	SIGNAL curr_tone : UNSIGNED (13 DOWNTO 0); -- = pitch(Hz) / 0.745
+    	SIGNAL note : STRING(1 TO 2);
     
 BEGIN
-    -- from Verilog file
-    update_clk : PROCESS -- always @(posedge(CLK100MHZ))begin
-    BEGIN
-        WAIT UNTIL rising_edge(CLK100MHZ);
-        CLK50MHZ <= NOT CLK50MHZ; -- CLK50MHZ<=~CLK50MHZ;
-    END PROCESS;
-    -- end Verilog file
+    	-- from Verilog file
+	update_clk : PROCESS -- always @(posedge(CLK100MHZ))begin
+    	BEGIN
+        	WAIT UNTIL rising_edge(CLK100MHZ);
+        	CLK50MHZ <= NOT CLK50MHZ; -- CLK50MHZ<=~CLK50MHZ;
+    	END PROCESS;
+    	-- end Verilog file
     
 	-- this process sets up a 20 bit binary counter clocked at 50MHz. This is used
 	-- to generate all necessary timing signals. dac_load_L and dac_load_R are pulses
@@ -149,12 +149,12 @@ BEGIN
 		R_data => data_R, 
 		SDATA => dac_SDIN 
 		);
-    tgen : tone
+    	tgen : tone
 	PORT MAP(
 		clk => audio_clk, -- instance a tone module
 		pitch => curr_tone,
 		data => data_L
 		);
-    data_R <= data_L; -- duplicate data on right channel
+    	data_R <= data_L; -- duplicate data on right channel
         
 END Behavioral;
